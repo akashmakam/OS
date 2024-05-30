@@ -1,3 +1,5 @@
+# Shell script to find the sum of two matrices
+
 #!/bin/bash
 
 declare -A a

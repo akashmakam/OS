@@ -7,10 +7,10 @@ read -p "Lower bound: " lb
 read -p "Upper bound: " ub
 
 echo -e "\nThe prime numbers in range are:"
-for ((i=$lb; i<$ub; i++)) do
+for ((i=lb; i<=ub; i++)); do
     num=$i
     flag=0
-    for ((j=2; j<$((i/2)); j++)) do
+    for ((j=2; j*j<=num; j++)); do
         if [ $((num%j)) -eq 0 ]; then
             flag=1
             break
