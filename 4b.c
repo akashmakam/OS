@@ -1,3 +1,5 @@
+// Priority Non-preemptive Scheduling Algorithm
+
 #include <stdio.h>
 #include <stdlib.h>
 
