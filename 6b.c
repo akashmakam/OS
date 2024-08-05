@@ -56,7 +56,6 @@ void findTimes(process *p, int n) {
                 index = i;
             }
         }
-
         if (index != -1) {
             p[index].ct = et + p[index].bt;
             p[index].tat = p[index].ct - p[index].at;
@@ -71,7 +70,7 @@ void findTimes(process *p, int n) {
             avgrt += p[index].rt;
             printf("|(%d) P%d (%d)|", temp, p[index].pid, et);
         } else {
-            printf("|(%d) P%d (%d)|", et, p[index].pid, et + 1);
+            printf("|(%d) *** (%d)|", et, et + 1);
             et++;
         }
     }

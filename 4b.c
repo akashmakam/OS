@@ -72,6 +72,7 @@ void findTimes(process *p, int n) {
             avgrt += p[index].rt;
             avgtat += p[index].tat;
         } else {
+            printf("|(%d) *** (%d)|", et, et + 1);
             et++;
         }
     }
