@@ -1,3 +1,4 @@
+# Largest of n numbers in an array
 #!/bin/bash
 read -p "Enter the size of the array: " n
 echo -e "\nEnter the numbers:"

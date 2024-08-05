@@ -1,3 +1,4 @@
+# Largest of three numbers
 #!/bin/bash
 n=3
 echo "Enter the three numbers:"

@@ -1,4 +1,4 @@
-# Program to read two matrices, find addition and display the input matrices and resultant in matrix format.
+# Matrix addition
 #!/bin/bash
 declare -A a
 declare -A b

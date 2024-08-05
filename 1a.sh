@@ -1,3 +1,4 @@
+# Palindrome checker
 #!/bin/bash
 read -p "Enter a number: " num
 rnum=0

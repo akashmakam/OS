@@ -1,3 +1,4 @@
+# Prime numbers in specified range
 #!/bin/bash
 echo "Enter the range:"
 read -p "Lowerbound: " n1
