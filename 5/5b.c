@@ -1,71 +1,66 @@
-// FCFS Scheduling Algorithm
-
 #include <stdio.h>
 #include <stdlib.h>
 
 typedef struct process {
-    int pid, at, bt, ct, tat, wt, rt;
+        int pid, at, bt, ct, tat, wt, rt, finished;
 } process;
 
-process *createProcesses(int n) {
-    process *p = (process *) malloc(sizeof(process) * n);
-    if (p == NULL) {
-        printf("\nMemory could not be dynamically allocated for the processes!\n");
-        exit(0);
-    }
-    printf("\nEnter the arrival times and burst times for the processes:\n");
-    for (int i = 0; i < n; i++) {
-        p[i].pid = i + 1;
-        printf("\nFor Process %d:\n", i+1);
-        printf("Arrival time: ");
-        scanf("%d", &p[i].at);
-        printf("Burst time: ");
-        scanf("%d", &p[i].bt);
-    }
-    return p;
-}
-
-void sortProcesses(process *p, int n) {
-    int flag = 0;
-    for (int i = 0; i < n; i++) {
-        flag = 0;
-        for (int j = 0; j < n - 1 - i; j++) {
-            if (p[j].at > p[j + 1].at) {
-                process temp = p[j];
-                p[j] = p[j + 1];
-                p[j + 1] = temp;
-                flag = 1;
-            }
+process* createProcesses(int n) {
+        process *p = (process *) malloc(sizeof(process)*n);
+        if (p == NULL) {
+                printf("Memory could not be dynamically allocated for the new processes!\n");
+                exit(1);
         }
-        if (flag == 0) {
-            break;
+        printf("\nEnter the arrival and burst times for each process:\n");
+        for (int i = 0; i < n; i++) {
+                p[i].pid = i+1;
+                printf("\nFor process %d\n",p[i].pid);
+                printf("Enter arrival time:");
+                scanf("%d", &p[i].at);
+                printf("Enter burst time:");
+                scanf("%d", &p[i].bt);
+                p[i].finished = 0;
         }
-    }
+        return p;
 }
 
 void findTimes(process *p, int n) {
-    int et = 0, temp = 0;
-    float avgtat = 0, avgwt = 0, avgrt = 0;
-    printf("\nGantt Chart:\n");
-    for (int i = 0; i < n; i++) {
-        if (et < p[i].at) {
-            et = p[i].at;
+        int et=0, temp, completed = 0, min_at;
+        float avg_tat = 0, avg_wt = 0, avg_rt = 0;
+        printf("\nGantt chart:\n");
+        while (n != completed) {
+                int index = -1;
+                min_at = 9999;
+                for (int i = 0; i < n; i++) {
+                        if (p[i].at <= et && !p[i].finished && p[i].at < min_at) {
+                                min_at = p[i].at;
+                                index = i;
+                        }
+                }
+                if (index != -1) {
+                        temp = et;
+                        et += p[index].bt;
+                        p[index].ct = et;
+                        p[index].tat = p[index].ct - p[index].at;
+                        p[index].wt = p[index].tat - p[index].bt;
+                        p[index].rt = p[index].wt;
+                        avg_tat += p[index].tat;
+                        avg_wt += p[index].wt;
+                        avg_rt += p[index].rt;
+                        p[index].finished = 1;
+                        completed++;
+                        printf("|(%d) P%d (%d)|", temp, p[index].pid, et);
+                } else {
+                        printf("|(%d) *** (%d)|", et, et+1);
+                        et++;
+                }
         }
-        temp = et;
-        et += p[i].bt;
-        p[i].ct = et;
-        p[i].tat = p[i].ct - p[i].at;
-        p[i].wt = p[i].tat - p[i].bt;
-        p[i].rt = p[i].wt;
-        avgtat += p[i].tat;
-        avgwt += p[i].wt;
-        avgrt += p[i].rt;
-        printf("|(%d) P%d (%d)|", temp, p[i].pid, et);
-    }
-    printf("\n\nResults:\nAverage Response Time: %.2f ms.\n", avgrt / n);
-    printf("Average Waiting Time: %.2f ms.\n", avgwt / n);
-    printf("Average Turnaround Time: %.2f ms.\n", avgtat / n);
+        printf("\n\nResults:\n"
+        "Average TAT: %.2f ms.\n"
+        "Average WT: %.2f ms.\n"
+        "Average RT: %.2f ms.\n", avg_tat/n, avg_wt/n, avg_rt/n);
 }
+
 
 void displayTimes(process *p, int n) {
     printf("\nObservation Table:\n");
@@ -76,13 +71,12 @@ void displayTimes(process *p, int n) {
 }
 
 int main() {
-    int n;
-    printf("Enter the number of processes: ");
-    scanf("%d", &n);
-    process *p = createProcesses(n);
-    sortProcesses(p, n);
-    findTimes(p, n);
-    displayTimes(p, n);
-    free(p);
-    return 0;
+        int n;
+        printf("Enter the number of processes: ");
+        scanf("%d", &n);
+        process *p = createProcesses(n);
+        findTimes(p, n);
+        displayTimes(p, n);
+        free(p);
+        return 0;
 }
