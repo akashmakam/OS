@@ -1,8 +1,9 @@
+// SJF Pre-emptive Scheduling Algorithm
 #include <stdio.h>
 #include <stdlib.h>
 
 typedef struct process {
-    int pid, at, bt, ct, tat, wt, remaining_bt;
+	int pid, at, bt, ct, tat, wt, remaining_bt;
 } process;
 
 process *createProcesses(int n) {
@@ -11,7 +12,7 @@ process *createProcesses(int n) {
         printf("\nMemory could not be dynamically allocated for the processes!\n");
         exit(0);
     }
-    printf("\nEnter the arrival times, burst times, and bt for the processes:\n");
+    printf("\nEnter the arrival times and burst times for the processes:\n");
     for (int i = 0; i < n; i++) {
         p[i].pid = i + 1;
         printf("\nFor Process %d:\n", i + 1);
@@ -25,47 +26,42 @@ process *createProcesses(int n) {
 }
 
 void findTimes(process *p, int n) {
-    int complete = 0, et = 0, highest_bt = 9999;
-    int selected = -1;
-    int check = 0;
-    float avgtat = 0, avgwt = 0;
-    printf("\nGantt Chart:\n");
-    while (complete != n) {
-        for (int i = 0; i < n; i++) {
-            if ((p[i].at <= et) && (p[i].bt < highest_bt) && (p[i].remaining_bt > 0)) {
-                highest_bt = p[i].bt;
-                selected = i;
-                check = 1;
-            }
-        }
-
-        if (check == 0) {
-            printf("|(%d) *** (%d)|", et, et + 1);
+	int completed_processes = 0, lowest_bt = 9999, selected = -1, check = 0, et = 0;
+	float avg_tat = 0, avg_wt = 0;
+	printf("\nGantt Chart:\n");
+	while (completed_processes != n) {
+		for (int i = 0; i < n; i++) {
+			if ((p[i].at <= et) && (p[i].remaining_bt > 0) && (p[i].remaining_bt < lowest_bt)) {
+				lowest_bt = p[i].bt;
+				selected = i;
+				check = 1;
+			}
+		}
+		
+		if (check == 0) {
+			printf("|(%d) *** (%d)|", et, et + 1);
             et++;
             continue;
-        }
-        p[selected].remaining_bt--;
-
-        highest_bt = p[selected].bt;
-
-        printf("|(%d) P%d (%d)|", et, p[selected].pid, et + 1);
-
-        if (p[selected].remaining_bt == 0) {
-            complete++;
-            check = 0;
-            highest_bt = 9999;
-            p[selected].ct = et+1;
-            p[selected].tat = p[selected].ct - p[selected].at;
-            p[selected].wt = p[selected].tat - p[selected].bt;
-            avgtat += p[selected].tat;
-            avgwt += p[selected].wt;
-        }
-        et++;
-    }
-
-    printf("\n\nResults:\n");
-    printf("Average Waiting Time: %.2f ms.\n", avgwt / n);
-    printf("Average Turnaround Time: %.2f ms.\n", avgtat / n);
+		}
+		
+		p[selected].remaining_bt--;
+		printf("|(%d) P%d (%d)|", et, p[selected].pid, et + 1);
+		
+		if (p[selected].remaining_bt == 0) {
+		    completed_processes++;
+		    check = 0;
+		    lowest_bt = 9999;
+		    p[selected].ct = et + 1;
+		    p[selected].tat = p[selected].ct - p[selected].at;
+		    p[selected].wt = p[selected].tat - p[selected].bt;
+		    avg_tat += p[selected].tat;
+		    avg_wt += p[selected].wt;
+		}
+		et++;
+	}
+	printf("\n\nResults:\n");
+    	printf("Average Waiting Time: %.2f ms.\n", avg_wt / n);
+    	printf("Average Turnaround Time: %.2f ms.\n", avg_tat / n);
 }
 
 void displayTimes(process *p, int n) {
