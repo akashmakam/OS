@@ -47,7 +47,7 @@ void findTimes(process *p, int n) {
 		}
 		
 		p[selected].remaining_bt--;
-		printf("|(%d) P%d (%d)|", et, p[selected].remaining_bt, et + 1);
+		printf("|(%d) P%d (%d)|", et, p[selected].pid, et + 1);
 		
 		if (p[selected].remaining_bt == 0) {
 			completed_processes++;
