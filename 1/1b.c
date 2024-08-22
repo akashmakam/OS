@@ -37,16 +37,13 @@ void findTimes(process *p, int n) {
 				check = 1;
 			}
 		}
-		
 		if (check == 0) {
 			printf("|(%d) *** (%d)|", et, et + 1);
             et++;
             continue;
 		}
-		
 		p[selected].remaining_bt--;
 		printf("|(%d) P%d (%d)|", et, p[selected].pid, et + 1);
-		
 		if (p[selected].remaining_bt == 0) {
 		    completed_processes++;
 		    check = 0;
@@ -60,8 +57,8 @@ void findTimes(process *p, int n) {
 		et++;
 	}
 	printf("\n\nResults:\n");
-    	printf("Average Waiting Time: %.2f ms.\n", avg_wt / n);
-    	printf("Average Turnaround Time: %.2f ms.\n", avg_tat / n);
+    printf("Average Waiting Time: %.2f ms.\n", avg_wt / n);
+    printf("Average Turnaround Time: %.2f ms.\n", avg_tat / n);
 }
 
 void displayTimes(process *p, int n) {
