@@ -18,7 +18,7 @@ void* calculate_factorial (void *arg) {
         for (int i = 1; i <= n; i++) {
                 factorial *= i;
         }
-        printf("factorial of natural numbers up to %d: %d\n", n, factorial);
+        printf("Factorial of natural numbers up to %d: %d\n", n, factorial);
         pthread_exit(NULL);
 }
 
@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
                 exit(1);
         }
         if ((pthread_create(&factorial_thread, NULL, calculate_factorial, &N) != 0)) {
-                printf("factorial thread could not be created!\n");
+                printf("Factorial thread could not be created!\n");
                 exit(1);
         }
         pthread_join(sum_thread, NULL);

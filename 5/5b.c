@@ -29,27 +29,27 @@ void findTimes(process *p, int n) {
         float avg_tat = 0, avg_wt = 0, avg_rt = 0;
         printf("\nGantt chart:\n");
         while (n != completed) {
-                int index = -1;
+                int selected = -1;
                 min_at = 9999;
                 for (int i = 0; i < n; i++) {
                         if (p[i].at <= et && !p[i].finished && p[i].at < min_at) {
                                 min_at = p[i].at;
-                                index = i;
+                                selected = i;
                         }
                 }
-                if (index != -1) {
+                if (selected != -1) {
                         temp = et;
-                        et += p[index].bt;
-                        p[index].ct = et;
-                        p[index].tat = p[index].ct - p[index].at;
-                        p[index].wt = p[index].tat - p[index].bt;
-                        p[index].rt = p[index].wt;
-                        avg_tat += p[index].tat;
-                        avg_wt += p[index].wt;
-                        avg_rt += p[index].rt;
-                        p[index].finished = 1;
+                        et += p[selected].bt;
+                        p[selected].ct = et;
+                        p[selected].tat = p[selected].ct - p[selected].at;
+                        p[selected].wt = p[selected].tat - p[selected].bt;
+                        p[selected].rt = p[selected].wt;
+                        avg_tat += p[selected].tat;
+                        avg_wt += p[selected].wt;
+                        avg_rt += p[selected].rt;
+                        p[selected].finished = 1;
                         completed++;
-                        printf("|(%d) P%d (%d)|", temp, p[index].pid, et);
+                        printf("|(%d) P%d (%d)|", temp, p[selected].pid, et);
                 } else {
                         printf("|(%d) *** (%d)|", et, et+1);
                         et++;

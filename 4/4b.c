@@ -1,10 +1,9 @@
 // Priority Non-preemptive Scheduling Algorithm
-
 #include <stdio.h>
 #include <stdlib.h>
 
 typedef struct process {
-    int pid, at, bt, ct, tat, wt, rt, pt, finished;
+    int pid, at, bt, ct, tat, wt, pr, finished;
 } process;
 
 process *createProcesses(int n) {
@@ -22,73 +21,50 @@ process *createProcesses(int n) {
         printf("Burst time: ");
         scanf("%d", &p[i].bt);
         printf("Priority: ");
-        scanf("%d", &p[i].pt);
+        scanf("%d", &p[i].pr);
         p[i].finished = 0;
     }
     return p;
 }
 
-void sortProcesses(process *p, int n) {
-    int flag;
-    for (int i = 0; i < n - 1; i++) {
-        flag = 0;
-        for (int j = 0; j < n - 1 - i; j++) {
-            if (p[j].at > p[j + 1].at) {
-                process temp = p[j];
-                p[j] = p[j + 1];
-                p[j + 1] = temp;
-                flag = 1;
-            }
-        }
-        if (flag == 0) {
-            break;
-        }
-    }
-}
-
 void findTimes(process *p, int n) {
-    int et = 0, completed = 0, min_pt, index;
-    float avgwt = 0, avgrt = 0, avgtat = 0;
-    
+    int et = 0, completed_processes = 0, min_pr, selected;
+    float avgwt = 0, avgtat = 0;
     printf("\nGantt Chart:\n");
-
-    while (completed != n) {
-        index = -1;
-        min_pt = 9999;
+    while (completed_processes != n) {
+        selected = -1;
+        min_pr = 9999;
         for (int i = 0; i < n; i++) {
-            if (p[i].at <= et && !p[i].finished && p[i].pt < min_pt) {
-                index = i;
-                min_pt = p[i].pt;
+            if ((p[i].at <= et) && (!p[i].finished) && (p[i].pr < min_pr)) {
+                selected = i;
+                min_pr = p[i].pr;
             }
         }
-        if (index != -1) {
-            p[index].ct = et + p[index].bt;
-            p[index].tat = p[index].ct - p[index].at;
-            p[index].wt = p[index].tat - p[index].bt;
-            p[index].rt = et - p[index].at;
-            p[index].finished = 1;
-            completed++;
-            printf("|(%d) P%d (%d)|", et, p[index].pid, p[index].ct);
-            et += p[index].bt;
-            avgwt += p[index].wt;
-            avgrt += p[index].rt;
-            avgtat += p[index].tat;
+        if (selected != -1) {
+            p[selected].finished = 1;
+            completed_processes++;
+            p[selected].ct = et + p[selected].bt;
+            p[selected].tat = p[selected].ct - p[selected].at;
+            p[selected].wt = p[selected].tat - p[selected].bt;
+            et += p[selected].bt;
+            avgwt += p[selected].wt;
+            avgtat += p[selected].tat;
+            printf("|(%d) P%d (%d)|", et, p[selected].pid, p[selected].ct);
         } else {
             printf("|(%d) *** (%d)|", et, et + 1);
             et++;
         }
     }
     printf("\n\nResults:\n");
-    printf("Average Response Time: %.2f ms.\n", avgrt / n);
     printf("Average Waiting Time: %.2f ms.\n", avgwt / n);
     printf("Average Turnaround Time: %.2f ms.\n", avgtat / n);
 }
 
 void displayTimes(process *p, int n) {
     printf("\nObservation Table:\n");
-    printf("PID\tAT\tBT\tPT\tCT\tTAT\tWT\tRT\n");
+    printf("PID\tAT\tBT\tPT\tCT\tTAT\tWT\n");
     for (int i = 0; i < n; i++) {
-        printf("%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", p[i].pid, p[i].at, p[i].bt, p[i].pt, p[i].ct, p[i].tat, p[i].wt, p[i].rt);
+        printf("%d\t%d\t%d\t%d\t%d\t%d\t%d\n", p[i].pid, p[i].at, p[i].bt, p[i].pr, p[i].ct, p[i].tat, p[i].wt);
     }
 }
 
@@ -97,7 +73,6 @@ int main() {
     printf("Enter the number of processes: ");
     scanf("%d", &n);
     process *p = createProcesses(n);
-    sortProcesses(p, n);
     findTimes(p, n);
     displayTimes(p, n);
     free(p);
