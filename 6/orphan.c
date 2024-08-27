@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+
 int main() {
     pid_t child_pid, my_pid, parent_pid;
     int i = 10;
@@ -20,6 +21,8 @@ int main() {
         printf("[CHILD] Sleeping for 10 seconds.\n");
         sleep(10);
         printf("[CHILD] My parent ended. So I am an orphan process adopted by init process.\n");
+        parent_pid = getppid();
+        printf("[CHILD] My new parent's pid is %d\n", parent_pid);
     } else {
         // Parent process
         printf("[PARENT] This is the parent process.\n");

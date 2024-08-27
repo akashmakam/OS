@@ -3,9 +3,7 @@
 read -p "Enter the size of the array: " n
 echo -e "\nEnter the numbers:"
 declare -a array
-for ((i=0; i < n; i++)); do
-    read -p "Enter number $((i+1)): " array[i]
-done
+read -a array
 largest=${array[0]}
 for ((i=1; i < n; i++)); do
     if [ ${array[i]} -gt $largest ]; then

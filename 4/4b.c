@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 typedef struct process {
-    int pid, at, bt, ct, tat, wt, pr, finished;
+    int pid, at, bt, ct, tat, wt, rt, pr, finished;
 } process;
 
 process *createProcesses(int n) {
@@ -29,7 +29,7 @@ process *createProcesses(int n) {
 
 void findTimes(process *p, int n) {
     int et = 0, completed_processes = 0, min_pr, selected;
-    float avgwt = 0, avgtat = 0;
+    float avgwt = 0, avgtat = 0, avgrt = 0;
     printf("\nGantt Chart:\n");
     while (completed_processes != n) {
         selected = -1;
@@ -46,10 +46,12 @@ void findTimes(process *p, int n) {
             p[selected].ct = et + p[selected].bt;
             p[selected].tat = p[selected].ct - p[selected].at;
             p[selected].wt = p[selected].tat - p[selected].bt;
-            et += p[selected].bt;
+            p[selected].rt = p[selected].wt;
             avgwt += p[selected].wt;
             avgtat += p[selected].tat;
+            avgrt += p[selected].rt;
             printf("|(%d) P%d (%d)|", et, p[selected].pid, p[selected].ct);
+            et += p[selected].bt;
         } else {
             printf("|(%d) *** (%d)|", et, et + 1);
             et++;
@@ -58,13 +60,14 @@ void findTimes(process *p, int n) {
     printf("\n\nResults:\n");
     printf("Average Waiting Time: %.2f ms.\n", avgwt / n);
     printf("Average Turnaround Time: %.2f ms.\n", avgtat / n);
+    printf("Average Response Time: %.2f ms.\n", avgrt / n);
 }
 
 void displayTimes(process *p, int n) {
     printf("\nObservation Table:\n");
-    printf("PID\tAT\tBT\tPT\tCT\tTAT\tWT\n");
+    printf("PID\tAT\tBT\tPT\tCT\tTAT\tWT\tRT\n");
     for (int i = 0; i < n; i++) {
-        printf("%d\t%d\t%d\t%d\t%d\t%d\t%d\n", p[i].pid, p[i].at, p[i].bt, p[i].pr, p[i].ct, p[i].tat, p[i].wt);
+        printf("%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", p[i].pid, p[i].at, p[i].bt, p[i].pr, p[i].ct, p[i].tat, p[i].wt, p[i].rt);
     }
 }
 

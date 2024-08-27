@@ -34,7 +34,7 @@ echo -e "\nThe sum of the two matrices are:"
 for ((i=0; i < m; i++)) do
     for ((j=0; j < n; j++)) do
         sum=$(( ${a[$i,$j]} + ${b[$i,$j]} ))
-        printf "%-5s" "$sum"
+        printf "$sum\t"
     done
     echo ""
 done
