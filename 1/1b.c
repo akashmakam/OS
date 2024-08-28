@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 typedef struct process {
-	int pid, at, bt, ct, tat, wt, rt, executed, remaining_bt;
+	int pid, at, bt, ct, tat, wt, rt, remaining_bt;
 } process;
 
 process *createProcesses(int n) {
@@ -21,7 +21,7 @@ process *createProcesses(int n) {
         printf("Burst time: ");
         scanf("%d", &p[i].bt);
         p[i].remaining_bt = p[i].bt;
-        p[i].executed = 0;
+        p[i].rt = -1;
     }
     return p;
 }
@@ -44,9 +44,9 @@ void findTimes(process *p, int n) {
             continue;
 		}
 		p[selected].remaining_bt--;
-        if (!p[selected].executed) {
+        if (!p[selected].rt == -1) {
             p[selected].rt = et - p[selected].at;
-            p[selected].executed = 1;
+            p[selected].rt = 1;
         }
 		printf("|(%d) P%d (%d)|", et, p[selected].pid, et + 1);
 		if (p[selected].remaining_bt == 0) {
